@@ -13,7 +13,6 @@ Está diseñada para ser simple, rápida y divertida, con animaciones suaves y a
 - 🕒 Historial de sesiones con fecha y hora  
 - 🗑️ Eliminar sesiones con *swipe to delete* y opción de deshacer  
 - 🌙 Modo oscuro  
-- 📱 Opción para mantener la pantalla encendida  
 - 📦 Datos almacenados localmente (sin servidores)  
 - 🔐 Sin recopilación de datos personales  
 
@@ -31,7 +30,6 @@ Está diseñada para ser simple, rápida y divertida, con animaciones suaves y a
 - Dart  
 - Hive – almacenamiento local  
 - Provider – gestión de estado  
-- wakelock_plus – control de pantalla encendida  
 - tutorial_coach_mark – tutorial interactivo  
 - Google Fonts  
 
