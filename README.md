@@ -1,15 +1,53 @@
-A new Flutter project.
+# 🍣 Sushimeter
 
-## Getting Started
+**Sushimeter** es una aplicación móvil desarrollada en **Flutter** para contar las piezas de sushi que comes en cada sesión.  
+Está diseñada para ser simple, rápida y divertida, con animaciones suaves y almacenamiento local.
 
-This project is a starting point for a Flutter application.
+---
 
-A few resources to get you started if this is your first Flutter project:
+## ✨ Características
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- 🍱 Contador interactivo de piezas de sushi  
+- 🔄 Animaciones suaves (rotación y efecto bounce)  
+- 🧠 Frases dinámicas según el número de piezas  
+- 🕒 Historial de sesiones con fecha y hora  
+- 🗑️ Eliminar sesiones con *swipe to delete* y opción de deshacer  
+- 🌙 Modo oscuro  
+- 📱 Opción para mantener la pantalla encendida  
+- 📦 Datos almacenados localmente (sin servidores)  
+- 🔐 Sin recopilación de datos personales  
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
->>>>>>> edbf680 (Initial commit)
+---
+
+## 📸 Capturas de pantalla
+
+*(Próximamente)*
+
+---
+
+## 🚀 Tecnologías utilizadas
+
+- Flutter  
+- Dart  
+- Hive – almacenamiento local  
+- Provider – gestión de estado  
+- wakelock_plus – control de pantalla encendida  
+- tutorial_coach_mark – tutorial interactivo  
+- Google Fonts  
+
+---
+
+## 📦 Instalación
+
+### Requisitos
+- Flutter SDK
+- Android Studio o VS Code
+- Xcode (para iOS)
+
+### Pasos
+
+```bash
+git clone https://github.com/samudev4/sushimeter.git
+cd sushimeter
+flutter pub get
+flutter run
