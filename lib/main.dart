@@ -6,6 +6,9 @@ import 'package:sushimeter/screens/home_screen.dart';
 import 'package:sushimeter/theme/theme_provider.dart';
 import 'models/sushi_entry.dart';
 
+// ✅ nuevo import
+import 'package:sushimeter/settings/settings_provider.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -14,8 +17,12 @@ void main() async {
   await Hive.openBox<SushiEntry>('sushiBox');
 
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        // ✅ cargamos preferencia y aplicamos wakelock al iniciar
+        ChangeNotifierProvider(create: (_) => SettingsProvider()..load()),
+      ],
       child: const MyApp(),
     ),
   );
