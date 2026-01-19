@@ -2,6 +2,16 @@
 
 **Sushimeter** es una aplicación móvil desarrollada en **Flutter** para contar las piezas de sushi que comes en cada sesión. Está diseñada para ser simple, rápida y divertida, con animaciones suaves y almacenamiento local.
 
+<p align="center" style="font-size: 22px;">
+  <a href="https://play.google.com/store/apps/details?id=com.samudev.dexhub">
+    <img src="https://raw.githubusercontent.com/IDTdesign/store-buttons/refs/heads/master/src/btn-gplay-es.svg" alt="Google Play" style="height: 5em; vertical-align:middle;">
+  </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://apps.apple.com/app/id6757762557">
+    <img src="https://raw.githubusercontent.com/IDTdesign/store-buttons/refs/heads/master/src/btn-appstore-es.svg" alt="App Store" style="height: 5em; vertical-align:middle;">
+  </a>
+</p>
+
 ---
 
 ## ✨ Características
