@@ -7,7 +7,7 @@
     <img src="https://raw.githubusercontent.com/IDTdesign/store-buttons/refs/heads/master/src/btn-gplay-es.svg" alt="Google Play" style="height: 5em; vertical-align:middle;">
   </a>
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="https://apps.apple.com/app/id6757762557">
+  <a href="https://apps.apple.com/app/id6757368640">
     <img src="https://raw.githubusercontent.com/IDTdesign/store-buttons/refs/heads/master/src/btn-appstore-es.svg" alt="App Store" style="height: 5em; vertical-align:middle;">
   </a>
 </p>
