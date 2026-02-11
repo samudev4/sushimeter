@@ -36,7 +36,18 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: AppStrings.textoNombreApp,
-      theme: ThemeData(useMaterial3: true),
+      theme: ThemeData(
+        useMaterial3: true,
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: {TargetPlatform.android: CupertinoPageTransitionsBuilder()},
+        ),
+      ),
+
+      darkTheme: ThemeData(
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: {TargetPlatform.android: CupertinoPageTransitionsBuilder()},
+        ),
+      ),
       home: const HomeScreen(),
     );
   }
