@@ -6,6 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sushimeter/constants/app_strings.dart';
+import 'package:sushimeter/data/sushi_skins.dart';
+import 'package:sushimeter/widgets/bouncing_sushi_icon.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:sushimeter/constants/app_colors.dart';
 import '../models/sushi_entry.dart';
@@ -28,10 +30,26 @@ class _CounterScreenState extends State<CounterScreen>
   late AnimationController _rotationController;
   late AnimationController _tapController;
   late Animation<double> _scaleAnimation;
+  String _selectedSushiId = 'classic';
+
+  bool _showSushiHint = false;
+
+  Future<void> _loadSelectedSushi() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedSushiId = prefs.getString('selected_sushi') ?? 'classic';
+    });
+  }
+
+  String get _currentSushiAsset {
+    return sushiSkins.firstWhere((s) => s.id == _selectedSushiId).asset;
+  }
 
   @override
   void initState() {
     super.initState();
+    _loadSelectedSushi();
+    _loadHintState();
 
     _rotationController = AnimationController(
       vsync: this,
@@ -70,6 +88,17 @@ class _CounterScreenState extends State<CounterScreen>
     _rotationController.dispose();
     _tapController.dispose();
     super.dispose();
+  }
+
+  Future<void> _loadHintState() async {
+    final prefs = await SharedPreferences.getInstance();
+    final used = prefs.getBool('sushi_customizer_used') ?? false;
+
+    if (!mounted) return;
+
+    setState(() {
+      _showSushiHint = !used;
+    });
   }
 
   Future<void> _showTutorialIfNeeded() async {
@@ -229,7 +258,7 @@ class _CounterScreenState extends State<CounterScreen>
               style: GoogleFonts.poppins(
                 color: AppColors.colorTextoBoton(context),
                 fontWeight: FontWeight.w600,
-                fontSize: 16
+                fontSize: 16,
               ),
             ),
           ),
@@ -250,6 +279,7 @@ class _CounterScreenState extends State<CounterScreen>
     return Scaffold(
       backgroundColor: AppColors.colorFondoScaffold(context),
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         backgroundColor: AppColors.colorFondoAppBar(context),
         centerTitle: true,
         title: Text(
@@ -288,11 +318,12 @@ class _CounterScreenState extends State<CounterScreen>
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       children: [
-                        const SizedBox(height: 120),
+                        const SizedBox(height: 80),
 
                         GestureDetector(
                           key: _sushiKey,
                           onTap: _increment,
+                          onLongPress: _openSushiCustomizer,
                           child: AnimatedBuilder(
                             animation: Listenable.merge([
                               _rotationController,
@@ -307,14 +338,47 @@ class _CounterScreenState extends State<CounterScreen>
                                 ),
                               );
                             },
-                            child: Image.asset(
-                              AppStrings.rutaImagenSushi,
-                              height: 200,
-                            ),
+                            child: Image.asset(_currentSushiAsset, height: 200),
                           ),
                         ),
+                        SizedBox(height: 20),
 
-                        const SizedBox(height: 80),
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          child: _showSushiHint
+                              ? Column(
+                                  key: const ValueKey('hint'),
+                                  children: [
+                                    const SizedBox(height: 12),
+                                    Wrap(
+                                      alignment: WrapAlignment.center,
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.center,
+                                      spacing: 6,
+                                      children: [
+                                        const Icon(
+                                          Icons.touch_app_outlined,
+                                          size: 18,
+                                          color: Colors.grey,
+                                        ),
+                                        Text(
+                                          'Mantén pulsado el sushi para cambiar su apariencia',
+                                          textAlign: TextAlign.center,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: GoogleFonts.poppins(
+                                            fontSize: 14,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                )
+                              : const SizedBox.shrink(),
+                        ),
+
+                        const SizedBox(height: 40),
 
                         AnimatedSwitcher(
                           key: _counterKey,
@@ -329,7 +393,7 @@ class _CounterScreenState extends State<CounterScreen>
                           ),
                         ),
 
-                        const SizedBox(height: 32),
+                        const SizedBox(height: 20),
 
                         AnimatedSwitcher(
                           duration: const Duration(milliseconds: 300),
@@ -378,6 +442,131 @@ class _CounterScreenState extends State<CounterScreen>
           );
         },
       ),
+    );
+  }
+
+  Future<void> _openSushiCustomizer() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('sushi_customizer_used', true);
+
+    setState(() {
+      _showSushiHint = false;
+    });
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.65,
+          minChildSize: 0.25,
+          maxChildSize: 0.9,
+          builder: (context, scrollController) {
+            return Container(
+              decoration: BoxDecoration(
+                color: AppColors.colorFondoScaffold(context),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(24),
+                ),
+              ),
+              child: Column(
+                children: [
+                  const SizedBox(height: 12),
+
+                  // Handle
+                  Container(
+                    width: 40,
+                    height: 5,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade400,
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  Text(
+                    textAlign: TextAlign.center,
+                    'Personaliza tu sushi',
+                    style: GoogleFonts.poppins(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.colorTexto(context),
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  Expanded(
+                    child: GridView.builder(
+                      controller: scrollController,
+                      padding: const EdgeInsets.all(16),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            mainAxisSpacing: 16,
+                            crossAxisSpacing: 16,
+                          ),
+                      itemCount: sushiSkins.length,
+                      itemBuilder: (_, index) {
+                        final sushi = sushiSkins[index];
+                        final selected = sushi.id == _selectedSushiId;
+
+                        return GestureDetector(
+                          onTap: () async {
+                            final prefs = await SharedPreferences.getInstance();
+                            await prefs.setString('selected_sushi', sushi.id);
+
+                            setState(() {
+                              _selectedSushiId = sushi.id;
+                            });
+
+                            Navigator.pop(context);
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 250),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: selected
+                                    ? AppColors.colorFondoBoton(context)
+                                    : Colors.transparent,
+                                width: 3,
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                BouncingSushiIcon(
+                                  enabled:
+                                      !selected, // 👈 el seleccionado NO bota
+                                  child: Image.asset(sushi.asset, height: 60),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  sushi.name,
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.colorTexto(context),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
